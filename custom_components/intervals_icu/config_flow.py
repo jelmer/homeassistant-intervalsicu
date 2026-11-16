@@ -6,11 +6,10 @@ import logging
 from typing import Any
 
 import voluptuous as vol
-
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .api import IntervalsIcuAuthError, IntervalsIcuApiError, IntervalsIcuClient
+from .api import IntervalsIcuApiError, IntervalsIcuAuthError, IntervalsIcuClient
 from .const import CONF_API_KEY, CONF_ATHLETE_ID, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)

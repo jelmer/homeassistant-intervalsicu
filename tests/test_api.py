@@ -11,8 +11,8 @@ import aiohttp
 from custom_components.intervals_icu.api import (
     IntervalsIcuApiError,
     IntervalsIcuAuthError,
-    IntervalsIcuNotFoundError,
     IntervalsIcuClient,
+    IntervalsIcuNotFoundError,
 )
 
 
