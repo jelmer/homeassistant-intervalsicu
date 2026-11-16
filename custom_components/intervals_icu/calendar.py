@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime, date, timedelta
+from datetime import date, datetime, timedelta
 from typing import Any
 
 from homeassistant.components.calendar import CalendarEntity, CalendarEvent
@@ -56,6 +56,7 @@ def _event_to_calendar_event(event: dict[str, Any]) -> CalendarEvent:
     start = _parse_event_datetime(event.get("start_date_local"))
     moving_time = event.get("moving_time")
 
+    end: datetime | date
     if isinstance(start, datetime) and moving_time:
         end = start + timedelta(seconds=moving_time)
     elif isinstance(start, datetime):

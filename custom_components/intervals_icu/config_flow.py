@@ -5,20 +5,19 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import voluptuous as vol
-
+import probatio
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .api import IntervalsIcuAuthError, IntervalsIcuApiError, IntervalsIcuClient
+from .api import IntervalsIcuApiError, IntervalsIcuAuthError, IntervalsIcuClient
 from .const import CONF_API_KEY, CONF_ATHLETE_ID, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
-STEP_USER_DATA_SCHEMA = vol.Schema(
+STEP_USER_DATA_SCHEMA = probatio.Schema(
     {
-        vol.Required(CONF_ATHLETE_ID): str,
-        vol.Required(CONF_API_KEY): str,
+        probatio.Required(CONF_ATHLETE_ID): str,
+        probatio.Required(CONF_API_KEY): str,
     }
 )
 
