@@ -1,0 +1,25 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@v4"
+      - uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.14"
+      - name: Install dependencies
+        run: pip install homeassistant aiohttp pytest pytest-asyncio ruff mypy
+      - name: Ruff check
+        run: ruff check .
+      - name: Ruff format
+        run: ruff format --check .
+      - name: Mypy
+        run: mypy --explicit-package-bases custom_components tests
+      - name: Test
+        run: python -m pytest tests
