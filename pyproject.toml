@@ -3,13 +3,23 @@ name = "homeassistant-intervalsicu"
 version = "0.1.5"
 description = "Intervals.icu integration for Home Assistant"
 requires-python = ">=3.12"
-dependencies = [
-    "homeassistant",
+
+[dependency-groups]
+test = [
+    # Brings Home Assistant itself, pytest and the fixtures a custom
+    # integration is tested against.
+    "pytest-homeassistant-custom-component==0.13.375",
+]
+dev = [
+    {include-group = "test"},
+    "mypy",
+    "ruff",
 ]
 
-[project.optional-dependencies]
-dev = [
-    "pytest",
-    "pytest-asyncio",
-    "aiohttp",
-]
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.mypy]
+explicit_package_bases = true

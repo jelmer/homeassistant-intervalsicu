@@ -6,20 +6,30 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    runs-on: "ubuntu-latest"
+  lint:
+    runs-on: ubuntu-latest
     steps:
-      - uses: "actions/checkout@v4"
-      - uses: "actions/setup-python@v5"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.14"
-      - name: Install dependencies
-        run: pip install homeassistant aiohttp pytest pytest-asyncio ruff mypy
-      - name: Ruff check
-        run: ruff check .
-      - name: Ruff format
-        run: ruff format --check .
-      - name: Mypy
-        run: mypy --explicit-package-bases custom_components tests
-      - name: Test
-        run: python -m pytest tests
+      - run: pip install --group dev
+      - run: ruff check custom_components tests
+      - run: ruff format --check custom_components tests
+      - run: mypy custom_components/intervals_icu tests
+
+  pytest:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Each release of the test harness pins one Home Assistant version:
+        # 0.13.367 is 2026.9.4 and 0.13.375 is 2026.10.4.
+        harness: ["0.13.367", "0.13.375"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - run: pip install pytest-homeassistant-custom-component==${{ matrix.harness }}
+      - run: pytest
