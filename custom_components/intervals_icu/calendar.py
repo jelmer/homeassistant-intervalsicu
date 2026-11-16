@@ -12,6 +12,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.util import dt as dt_util
 
 from .api import IntervalsIcuApiError
 from .const import CONF_ATHLETE_ID, DOMAIN
@@ -40,7 +41,10 @@ def _parse_event_datetime(
         return fallback_date or date.today()
     # Intervals.icu uses "2024-01-15T00:00:00" for local datetimes
     if "T" in date_str:
-        return datetime.fromisoformat(date_str)
+        parsed = datetime.fromisoformat(date_str)
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=dt_util.get_default_time_zone())
+        return parsed
     return date.fromisoformat(date_str)
 
 
@@ -109,16 +113,17 @@ class IntervalsIcuCalendar(CoordinatorEntity[IntervalsIcuCoordinator], CalendarE
         """Return the next upcoming event from coordinator data."""
         if not self.coordinator.data or not self.coordinator.data.events:
             return None
-        now = datetime.now()
+        now = dt_util.now()
         for ev in self.coordinator.data.events:
             if ev.get("category") not in ("WORKOUT", "TARGET", "NOTE", "RACE"):
                 continue
             cal_event = _event_to_calendar_event(ev)
             # Include events that haven't ended yet
             event_end = cal_event.end
-            if isinstance(event_end, date) and not isinstance(event_end, datetime):
-                event_end = datetime.combine(event_end, datetime.max.time())
-            if event_end >= now:
+            if not isinstance(event_end, datetime):
+                # All-day event ends are exclusive
+                event_end = dt_util.start_of_local_day(event_end)
+            if event_end > now:
                 return cal_event
         return None
 

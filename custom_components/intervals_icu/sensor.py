@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import date
 from typing import Any
 
 from homeassistant.components.sensor import (
@@ -82,6 +83,13 @@ def _next_event_value(key: str) -> Callable[[IntervalsIcuData], Any]:
         return workouts[0].get(key)
 
     return _get
+
+
+def _next_workout_date(data: IntervalsIcuData) -> date | None:
+    value = _next_event_value("start_date_local")(data)
+    if value is None:
+        return None
+    return date.fromisoformat(value[:10])
 
 
 def _next_event_available(data: IntervalsIcuData) -> bool:
@@ -390,7 +398,7 @@ SENSOR_DESCRIPTIONS: tuple[IntervalsIcuSensorEntityDescription, ...] = (
         key="next_workout_date",
         translation_key="next_workout_date",
         device_class=SensorDeviceClass.DATE,
-        value_fn=_next_event_value("start_date_local"),
+        value_fn=_next_workout_date,
         available_fn=_next_event_available,
     ),
     IntervalsIcuSensorEntityDescription(
