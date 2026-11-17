@@ -34,3 +34,15 @@ class TestNextWorkoutDate(unittest.TestCase):
     def test_no_workout(self) -> None:
         data = self._data([{"category": "NOTE", "start_date_local": "2026-11-16"}])
         self.assertIsNone(_description("next_workout_date").value_fn(data))
+
+
+class TestLastActivityCadence(unittest.TestCase):
+    def test_returns_average_cadence(self) -> None:
+        data = IntervalsIcuData(
+            athlete={},
+            wellness=None,
+            activities=[{"name": "Ride", "average_cadence": 88.5}],
+            events=[],
+            pace_curve=None,
+        )
+        self.assertEqual(88.5, _description("last_activity_avg_cadence").value_fn(data))

@@ -346,6 +346,14 @@ SENSOR_DESCRIPTIONS: tuple[IntervalsIcuSensorEntityDescription, ...] = (
         available_fn=_latest_activity_available,
     ),
     IntervalsIcuSensorEntityDescription(
+        key="last_activity_avg_cadence",
+        translation_key="last_activity_avg_cadence",
+        native_unit_of_measurement="rpm",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=_latest_activity_value("average_cadence"),
+        available_fn=_latest_activity_available,
+    ),
+    IntervalsIcuSensorEntityDescription(
         key="last_activity_avg_power",
         translation_key="last_activity_avg_power",
         native_unit_of_measurement="W",

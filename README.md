@@ -61,6 +61,7 @@ A custom Home Assistant integration for [Intervals.icu](https://intervals.icu), 
 | Last activity training load | Training load score |
 | Last activity avg HR | Average heart rate (bpm) |
 | Last activity max HR | Max heart rate (bpm) |
+| Last activity avg cadence | Average cadence (rpm) |
 | Last activity avg power | Average power (W) |
 | Last activity normalized power | Normalized power (W) |
 | Last activity intensity | Intensity factor |

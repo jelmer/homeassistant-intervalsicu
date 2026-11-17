@@ -47,6 +47,7 @@
       "last_activity_training_load": { "name": "Last activity training load" },
       "last_activity_avg_hr": { "name": "Last activity avg HR" },
       "last_activity_max_hr": { "name": "Last activity max HR" },
+      "last_activity_avg_cadence": { "name": "Last activity avg cadence" },
       "last_activity_avg_power": { "name": "Last activity avg power" },
       "last_activity_np": { "name": "Last activity normalized power" },
       "last_activity_intensity": { "name": "Last activity intensity" },
